@@ -4,18 +4,18 @@ import { ForbiddenError } from "apollo-server";
 import { combineResolvers, skip } from "graphql-resolvers";
 
 // Verify user is authenticated
-export const isAuthenticated = (parent, args, { me }) =>
+export const isAuthenticated = (_parent, _args, { me }) =>
   me ? skip : new ForbiddenError("Not authenticated as user.");
 
 // Verify is user is admin
 export const isAdmin = combineResolvers(
   isAuthenticated,
-  (parent, args, { me: { role } }) =>
+  (_parent, _args, { me: { role } }) =>
     role === "ADMIN" ? skip : new ForbiddenError("Not authorized as admin.")
 );
 
 // Check if message is owned by user
-export const isMessageOwner = async (parent, { id }, { models, me }) => {
+export const isMessageOwner = async (_parent, { id }, { models, me }) => {
   const message = await models.Message.findByPk(id, { raw: true });
 
   if (message.userId !== me.id) {
@@ -26,7 +26,7 @@ export const isMessageOwner = async (parent, { id }, { models, me }) => {
 };
 
 // Check if user is current user
-export const isUser = async (parent, { id }, { models, me }) => {
+export const isUser = async (_parent, { id }, { models, me }) => {
   const user = await models.User.findByPk(id, { raw: true });
 
   if (user.id !== me.id) {
@@ -36,7 +36,7 @@ export const isUser = async (parent, { id }, { models, me }) => {
   return skip;
 };
 // Check if user is current owner or team member
-export const isAuthEmployee = async (parent, { id }, { models, me }) => {
+export const isAuthEmployee = async (_parent, { id }, { models, me }) => {
   const employer = await models.Employer.findByPk(id, { raw: true });
 
   if (employer.owner !== me.id) {

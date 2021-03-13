@@ -5,7 +5,7 @@ import { combineResolvers } from "graphql-resolvers";
 // Apollo error handling
 import { AuthenticationError, UserInputError } from "apollo-server";
 // Check if user has admin role
-import { isAdmin, isAuthenticated, isUser } from "./authorization";
+import { isAdmin, isUser } from "./authorization";
 
 // Generate token
 const createToken = async (user, secret, expiresIn) => {
@@ -18,7 +18,7 @@ const createToken = async (user, secret, expiresIn) => {
 export default {
   Query: {
     // Multiple Users
-    getUsers: async (parent, args, { models }) => {
+    getUsers: async (_parent, _args, { models }) => {
       const users = await models.User.findAll({
         include: [
           {
@@ -29,21 +29,27 @@ export default {
       return users;
     },
     // Single User
-    getUser: async (parent, { id }, { models }) => {
+    getUser: async (_parent, { id }, { models }) => {
       return await models.User.findByPk(id);
     },
     // Current User
-    me: async (parent, args, { models, me }) => {
+    me: async (_parent, _args, { models, me }) => {
       if (!me) {
         return null;
       }
-      return await models.User.findByPk(me.id);
+      return await models.User.findByPk(me.id, {
+        include: [
+          {
+            model: models.Profile,
+          },
+        ],
+      });
     },
   },
   Mutation: {
     // Add user with hashed password
     registerUser: async (
-      parent,
+      _parent,
       { username, email, password },
       { models, secret }
     ) => {
@@ -60,7 +66,7 @@ export default {
     },
     // Sign in user based on user input.
     loginUser: async (
-      parent,
+      _parent,
       // Login can be username or email
       { login, password },
       { models, secret }
@@ -85,7 +91,7 @@ export default {
     // Delete a user
     deleteUser: combineResolvers(
       isUser || isAdmin,
-      async (parent, { id }, { models }) => {
+      async (_parent, { id }, { models }) => {
         return await models.User.destroy({
           where: { id },
         });
@@ -94,7 +100,7 @@ export default {
     // Delete a user
     updateUser: combineResolvers(
       isUser || isAdmin,
-      async (parent, args, { models }) => {
+      async (_parent, args, { models }) => {
         console.log(args);
         let user = await models.User.findByPk(args.id);
 

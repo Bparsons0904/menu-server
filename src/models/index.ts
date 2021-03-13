@@ -1,4 +1,4 @@
-import Sequelize from "sequelize";
+import { Sequelize } from "sequelize";
 import "dotenv/config";
 
 // Set sequelize based on environment
@@ -9,8 +9,8 @@ if (process.env.DATABASE_URL) {
   });
 } else {
   sequelize = new Sequelize(
-    process.env.TEST_DATABASE || process.env.DATABASE,
-    process.env.DATABASE_USER,
+    process.env.TEST_DATABASE ?? process.env.DATABASE ?? "",
+    process.env.DATABASE_USER ?? "",
     process.env.DATABASE_PASSWORD,
     {
       dialect: "postgres",

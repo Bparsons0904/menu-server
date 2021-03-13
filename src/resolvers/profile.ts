@@ -1,19 +1,14 @@
 // Allow for authentications
 import { combineResolvers } from "graphql-resolvers";
 // Apollo error handling
-import { AuthenticationError, UserProfileInputError } from "apollo-server";
+// import { AuthenticationError } from "apollo-server";
 // Check if user has admin role
-import {
-  isAdmin,
-  isAuthenticated,
-  isUserProfile,
-  isAuthEmployee,
-} from "./authorization";
+import { isAdmin, isAuthenticated } from "./authorization";
 
 export default {
   Query: {
     // Single UserProfile
-    getUserProfile: async (parent, { userId }, { models }) => {
+    getUserProfile: async (_parent, { userId }, { models }) => {
       const userProfile = await models.UserProfile.findAll({
         where: {
           userId: userId,
@@ -24,7 +19,7 @@ export default {
       return userProfile[0];
     },
     // Single UserProfile
-    getProfile: async (parent, { id }, { models }) => {
+    getProfile: async (_parent, { id }, { models }) => {
       const user = await models.User.findByPk(id);
       const profile = await models.UserProfile.findAll({
         where: {
@@ -37,7 +32,7 @@ export default {
       return { userProfile, user };
     },
     // All UserProfiles
-    getUserProfiles: async (parent, { active }, { models }) => {
+    getUserProfiles: async (_parent, { active }, { models }) => {
       let userProfile;
       console.log(active);
       if (active) {
@@ -57,7 +52,7 @@ export default {
     // Create new userProfile
     createProfile: combineResolvers(
       isAuthenticated || isAdmin,
-      async (parent, args, { models, me }) => {
+      async (_parent, args, { models }) => {
         console.log(args);
         // Create new userProfile
         const userProfile = await models.UserProfile.create({
@@ -73,7 +68,7 @@ export default {
     // Update userProfile information
     updateProfile: combineResolvers(
       isAuthenticated || isAdmin,
-      async (parent, args, { models }) => {
+      async (_parent, args, { models }) => {
         // Retrieve both userProfile and address
         let userProfile = await models.UserProfile.findByPk(args.id);
         // Check each possible arguments for changes

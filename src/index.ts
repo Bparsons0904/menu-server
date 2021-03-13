@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request } from "express";
 // Token generation
 import jwt from "jsonwebtoken";
 // Import required modules for Apollo/GraphQL
@@ -21,18 +21,21 @@ const app = express();
 app.use(cors());
 
 // Set current user
-const getMe = async (req) => {
+const getMe = async (req: Request) => {
   // token from header
-  const token = req.headers["x-token"];
+  const token: string = <string>req.headers["x-token"] ?? "";
   // If token is found
   if (token) {
     // Verify token matches secret token
+    const secret: string = process.env.SECRET ?? "";
     try {
-      return await jwt.verify(token, process.env.SECRET);
+      return await jwt.verify(token, secret);
     } catch (e) {
       throw new AuthenticationError("Your session expired. Sign in again.");
     }
   }
+
+  return;
 };
 
 // Init apollo server with schema and resolvers
@@ -75,6 +78,7 @@ const server = new ApolloServer({
         },
       };
     }
+    return;
   },
 });
 
@@ -86,7 +90,7 @@ const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
 // Check if using testing database
-const resetDB = true;
+const resetDB = process.env.RESETDB == "true" ? true : false;
 // Check if production database in use
 const isProduction = !!process.env.DATABASE_URL;
 // Port based on prod or dev environment

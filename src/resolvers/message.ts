@@ -16,7 +16,7 @@ export default {
   // Base query's
   Query: {
     // Multiple Messages
-    messages: async (parent, { cursor, limit = 100 }, { models }) => {
+    messages: async (_parent, { cursor, limit = 100 }, { models }) => {
       // If cursor, set location point else no options
       const cursorOptions = cursor
         ? {
@@ -48,7 +48,7 @@ export default {
       };
     },
     // Single Message
-    message: async (parent, { id }, { models }) => {
+    message: async (_parent, { id }, { models }) => {
       return await models.Message.findByPk(id);
     },
   },
@@ -57,7 +57,7 @@ export default {
   Mutation: {
     createMessage: combineResolvers(
       isAuthenticated,
-      async (parent, { text }, { models, me }) => {
+      async (_parent, { text }, { models, me }) => {
         const message = await models.Message.create({
           text,
           userId: me.id,
@@ -75,14 +75,14 @@ export default {
     deleteMessage: combineResolvers(
       isAuthenticated,
       isMessageOwner,
-      async (parent, { id }, { models }) => {
+      async (_parent, { id }, { models }) => {
         return await models.Message.destroy({ where: { id } });
       }
     ),
     updateMessage: combineResolvers(
       isAuthenticated,
       isMessageOwner,
-      async (parent, { id, text }, { models }) => {
+      async (_parent, { id, text }, { models }) => {
         // Update message with user input and return updated message
         return await models.Message.update(
           { text: text },
@@ -97,7 +97,7 @@ export default {
   // Define Message type return value
   Message: {
     // Return user object matching message userId
-    user: async (message, args, { models }) => {
+    user: async (message, _args, { models }) => {
       return await models.User.findByPk(message.userId);
     },
   },
