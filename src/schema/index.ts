@@ -1,5 +1,5 @@
 import { gql } from "apollo-server-express";
-import { GraphQLJSONObject } from "graphql-type-json";
+// import { GraphQLJSONObject } from "graphql-type-json";
 
 // Import User and Message schemas
 import userSchema from "./user";
