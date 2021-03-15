@@ -27,7 +27,9 @@ const getMe = async (req: Request) => {
   // If token is found
   if (token) {
     // Verify token matches secret token
-    const secret: string = process.env.SECRET ?? "";
+    const secret: string =
+      process.env.SECRET ??
+      "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTYxNTYxMDcwOSwiaWF0IjoxNjE1NjEwNzA5fQ.vpub-pTfzR5bKyWzVhKsFZFV2T3jOE9c9Gcfr8OYCJU";
     try {
       return await jwt.verify(token, secret);
     } catch (e) {
@@ -72,7 +74,9 @@ const server = new ApolloServer({
       return {
         models,
         me,
-        secret: process.env.SECRET,
+        secret:
+          process.env.SECRET ??
+          "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTYxNTYxMDcwOSwiaWF0IjoxNjE1NjEwNzA5fQ.vpub-pTfzR5bKyWzVhKsFZFV2T3jOE9c9Gcfr8OYCJU",
         loaders: {
           user: new DataLoader((keys) => loaders.user.batchUsers(keys, models)),
         },

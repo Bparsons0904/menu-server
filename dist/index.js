@@ -47,7 +47,7 @@ const getMe = (req) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     const token = (_a = req.headers["x-token"]) !== null && _a !== void 0 ? _a : "";
     if (token) {
-        const secret = (_b = process.env.SECRET) !== null && _b !== void 0 ? _b : "";
+        const secret = (_b = process.env.SECRET) !== null && _b !== void 0 ? _b : "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTYxNTYxMDcwOSwiaWF0IjoxNjE1NjEwNzA5fQ.vpub-pTfzR5bKyWzVhKsFZFV2T3jOE9c9Gcfr8OYCJU";
         try {
             return yield jsonwebtoken_1.default.verify(token, secret);
         }
@@ -69,6 +69,7 @@ const server = new apollo_server_express_1.ApolloServer({
         return Object.assign(Object.assign({}, error), { message });
     },
     context: ({ req, connection }) => __awaiter(void 0, void 0, void 0, function* () {
+        var _c;
         if (connection) {
             return {
                 models: models_1.default,
@@ -82,7 +83,7 @@ const server = new apollo_server_express_1.ApolloServer({
             return {
                 models: models_1.default,
                 me,
-                secret: process.env.SECRET,
+                secret: (_c = process.env.SECRET) !== null && _c !== void 0 ? _c : "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTYxNTYxMDcwOSwiaWF0IjoxNjE1NjEwNzA5fQ.vpub-pTfzR5bKyWzVhKsFZFV2T3jOE9c9Gcfr8OYCJU",
                 loaders: {
                     user: new dataloader_1.default((keys) => loaders_1.default.user.batchUsers(keys, models_1.default)),
                 },
