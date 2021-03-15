@@ -49,14 +49,13 @@ exports.default = {
                 ],
             });
         }),
+        test: (_parent, _args, { _models }) => __awaiter(void 0, void 0, void 0, function* () {
+            return true;
+        }),
     },
     Mutation: {
-        registerUser: (_parent, { username, email, password }, { models, secret }) => __awaiter(void 0, void 0, void 0, function* () {
-            const newUser = yield models.User.create({
-                username,
-                email,
-                password,
-            });
+        registerUser: (_parent, args, { models, secret }) => __awaiter(void 0, void 0, void 0, function* () {
+            const newUser = yield models.User.create(Object.assign({}, args));
             return {
                 token: createToken(newUser, secret, "30 days"),
                 user: newUser,
