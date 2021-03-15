@@ -9,6 +9,9 @@ exports.sequelize = sequelize;
 if (process.env.DATABASE_URL) {
     exports.sequelize = sequelize = new sequelize_1.Sequelize(process.env.DATABASE_URL, {
         dialect: "postgres",
+        dialectOptions: {
+            ssl: true,
+        },
     });
 }
 else {
