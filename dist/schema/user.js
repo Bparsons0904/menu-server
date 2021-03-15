@@ -6,7 +6,6 @@ exports.default = apollo_server_express_1.gql `
     getUser(id: ID!): User
     getUsers: [User!]
     me: User
-    test: Boolean
   }
 
   extend type Mutation {

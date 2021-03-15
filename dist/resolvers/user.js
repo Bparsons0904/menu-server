@@ -49,9 +49,6 @@ exports.default = {
                 ],
             });
         }),
-        test: (_parent, _args, { _models }) => __awaiter(void 0, void 0, void 0, function* () {
-            return true;
-        }),
     },
     Mutation: {
         registerUser: (_parent, args, { models, secret }) => __awaiter(void 0, void 0, void 0, function* () {
