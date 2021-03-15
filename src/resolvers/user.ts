@@ -45,6 +45,9 @@ export default {
         ],
       });
     },
+    test: async (_parent, _args, { _models }) => {
+      return true;
+    },
   },
   Mutation: {
     // Add user with hashed password
