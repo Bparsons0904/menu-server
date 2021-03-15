@@ -6,6 +6,7 @@ export default gql`
     getUser(id: ID!): User
     getUsers: [User!]
     me: User
+    test: Boolean
   }
 
   extend type Mutation {

@@ -45,18 +45,15 @@ export default {
         ],
       });
     },
+    test: async (_parent, _args, { _models }) => {
+      return true;
+    },
   },
   Mutation: {
     // Add user with hashed password
-    registerUser: async (
-      _parent,
-      { username, email, password },
-      { models, secret }
-    ) => {
+    registerUser: async (_parent, args, { models, secret }) => {
       const newUser = await models.User.create({
-        username,
-        email,
-        password,
+        ...args,
       });
 
       return {
